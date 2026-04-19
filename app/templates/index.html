@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunkoTracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=4">
+</head>
+<body>
+    <div id="app">
+        <!-- ═══════════════════ HEADER ═══════════════════ -->
+        <header class="header">
+            <div class="header-inner">
+                <h1 class="logo">FunkoTracker</h1>
+
+                <!-- Sinistra: tab collezione -->
+                <div class="nav-left">
+                    <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+                    <button class="tab-btn" data-tab="wishlist">Wishlist</button>
+                    <button class="tab-btn" data-tab="owned">Posseduti</button>
+                </div>
+
+                <!-- Spacer -->
+                <div class="nav-spacer"></div>
+
+                <!-- Destra: bottone aggiungi + separatore + catalogo -->
+                <div class="nav-right">
+                    <button class="btn btn-primary" id="btn-add-collection">+ Aggiungi</button>
+                    <div class="nav-separator"></div>
+                    <button class="tab-btn tab-catalog" data-tab="catalog">Catalogo</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- ═══════════════════ MAIN ═══════════════════ -->
+        <main class="main">
+
+            <!-- Dashboard -->
+            <section id="tab-dashboard" class="tab-panel active">
+
+                <!-- Riga 1: Posseduti -->
+                <div class="dash-section-label owned">Posseduti</div>
+                <div class="dash-row">
+                    <div class="stat-card accent-owned">
+                        <div class="stat-value" id="stat-owned-count">—</div>
+                        <div class="stat-label">Posseduti</div>
+                    </div>
+                    <div class="stat-card accent-owned">
+                        <div class="stat-value" id="stat-owned-paid">—</div>
+                        <div class="stat-label">Totale pagato</div>
+                    </div>
+                    <div class="stat-card accent-owned">
+                        <div class="stat-value" id="stat-owned-value">—</div>
+                        <div class="stat-label">Valore stimato</div>
+                    </div>
+                </div>
+
+                <div class="dash-divider"></div>
+
+                <!-- Riga 2: Wishlist -->
+                <div class="dash-section-label wish">Wishlist</div>
+                <div class="dash-row">
+                    <div class="stat-card accent-wish">
+                        <div class="stat-value" id="stat-wish-count">—</div>
+                        <div class="stat-label">In wishlist</div>
+                    </div>
+                    <div class="stat-card accent-wish">
+                        <div class="stat-value" id="stat-wish-paid">—</div>
+                        <div class="stat-label">Totale pagato</div>
+                    </div>
+                    <div class="stat-card accent-wish">
+                        <div class="stat-value" id="stat-wish-value">—</div>
+                        <div class="stat-label">Valore stimato</div>
+                    </div>
+                </div>
+
+                <div class="dash-divider"></div>
+
+                <!-- Meta row: catalogo + extras -->
+                <div class="dash-meta-row">
+                    <div class="meta-stat">
+                        <span class="meta-val" id="stat-catalog-val">—</span>
+                        <span class="meta-label">nel catalogo</span>
+                    </div>
+                    <div class="meta-sep"></div>
+                    <div class="meta-stat">
+                        <span class="meta-val" id="stat-eval-val">—</span>
+                        <span class="meta-label">da valutare</span>
+                    </div>
+                    <div class="meta-sep"></div>
+                    <div class="meta-stat">
+                        <span class="meta-val" id="stat-vaulted-val">—</span>
+                        <span class="meta-label">vaulted in collezione</span>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Wishlist -->
+            <section id="tab-wishlist" class="tab-panel">
+                <div class="toolbar">
+                    <input type="text" class="search-input" id="search-wishlist" placeholder="Cerca nella wishlist...">
+                    <select class="select-filter" id="filter-franchise-wishlist">
+                        <option value="">Tutte le franchise</option>
+                    </select>
+                </div>
+                <div class="funko-list" id="list-wishlist"></div>
+            </section>
+
+            <!-- Posseduti -->
+            <section id="tab-owned" class="tab-panel">
+                <div class="toolbar">
+                    <input type="text" class="search-input" id="search-owned" placeholder="Cerca tra i posseduti...">
+                    <select class="select-filter" id="filter-franchise-owned">
+                        <option value="">Tutte le franchise</option>
+                    </select>
+                </div>
+                <div class="funko-list" id="list-owned"></div>
+            </section>
+
+            <!-- Catalogo -->
+            <section id="tab-catalog" class="tab-panel">
+                <div class="toolbar">
+                    <input type="text" class="search-input" id="search-catalog" placeholder="Cerca nel catalogo...">
+                    <select class="select-filter" id="filter-franchise-catalog">
+                        <option value="">Tutte le franchise</option>
+                    </select>
+                    <div class="chip-filters" id="chips-catalog">
+                        <button class="chip" data-filter="is_vaulted">Vaulted</button>
+                        <button class="chip" data-filter="exclusive">Exclusive</button>
+                        <button class="chip" data-filter="is_chase">Chase</button>
+                        <button class="chip" data-filter="sdcc">SDCC</button>
+                        <button class="chip" data-filter="rides">Rides</button>
+                        <button class="chip" data-filter="2-pack">2-Pack</button>
+                    </div>
+                    <button class="btn btn-catalog-add" id="btn-add-catalog">+ Aggiungi al catalogo</button>
+                </div>
+                <div class="funko-list" id="list-catalog"></div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ═══════════════════ DETAIL PANEL ═══════════════════ -->
+    <div id="detail-overlay" class="detail-overlay hidden"></div>
+    <aside id="detail-panel" class="detail-panel hidden">
+        <div class="detail-header">
+            <button class="btn-icon" id="btn-close-detail">✕</button>
+            <div class="detail-actions">
+                <button class="btn btn-secondary" id="btn-edit-detail">Modifica</button>
+                <button class="btn btn-danger" id="btn-delete-detail">Elimina</button>
+            </div>
+        </div>
+        <div id="detail-content"></div>
+    </aside>
+
+    <!-- ═══════════════════ MODAL: AGGIUNGI ALLA COLLEZIONE ═══════════════════ -->
+    <!-- Step 1: cerca nel catalogo -->
+    <!-- Step 2: compila i dati personali -->
+    <div id="modal-collection-overlay" class="modal-overlay hidden">
+        <div class="modal" id="modal-collection">
+            <div class="modal-header">
+                <div>
+                    <h2 class="modal-title" id="modal-col-title">Aggiungi alla collezione</h2>
+                    <p class="modal-subtitle" id="modal-col-subtitle">Cerca un Funko nel catalogo</p>
+                </div>
+                <button class="btn-icon" id="btn-close-modal-collection">✕</button>
+            </div>
+            <div class="modal-body">
+
+                <!-- STEP 1 -->
+                <div id="col-step1">
+                    <div class="step-search-wrap">
+                        <input type="text" class="search-input" id="col-search-input" placeholder="Cerca per nome, franchise, serie...">
+                    </div>
+                    <div id="col-search-results" class="col-search-results">
+                        <div class="search-hint">Inizia a digitare per cercare nel catalogo</div>
+                    </div>
+                </div>
+
+                <!-- STEP 2 -->
+                <div id="col-step2" class="hidden">
+                    <div id="col-selected-preview" class="col-selected-preview"></div>
+                    <form id="collection-form">
+                        <div class="form-section-title">Dati personali</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Status *</label>
+                                <select name="status" required>
+                                    <option value="wishlist">Wishlist</option>
+                                    <option value="evaluating">Valutando</option>
+                                    <option value="owned">Posseduto</option>
+                                    <option value="sold">Venduto</option>
+                                    <option value="gifted">Regalato</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Condizione</label>
+                                <select name="condition">
+                                    <option value="">—</option>
+                                    <option value="mint">Mint</option>
+                                    <option value="good">Good</option>
+                                    <option value="damaged">Damaged</option>
+                                    <option value="no_box">No Box</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Priorità</label>
+                                <select name="priority">
+                                    <option value="">—</option>
+                                    <option value="alta">Alta</option>
+                                    <option value="media">Media</option>
+                                    <option value="bassa">Bassa</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Prezzo acquisto (€)</label>
+                                <input type="number" step="0.01" name="purchase_price">
+                            </div>
+                            <div class="form-group">
+                                <label>Data acquisto</label>
+                                <input type="text" name="purchase_date" placeholder="YYYY-MM-DD">
+                            </div>
+                            <div class="form-group">
+                                <label>Budget max (€)</label>
+                                <input type="number" step="0.01" name="max_budget">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Valore stimato (€)</label>
+                                <input type="number" step="0.01" name="estimated_value">
+                            </div>
+                            <div class="form-group flex-2">
+                                <label>Fonte acquisto</label>
+                                <input type="text" name="purchase_source" placeholder="es. eBay, Amazon">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>URL acquisto</label>
+                            <input type="url" name="purchase_url">
+                        </div>
+                        <div class="form-group">
+                            <label>Note</label>
+                            <textarea name="notes" rows="2"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="btn-col-back">← Indietro</button>
+                            <button type="submit" class="btn btn-primary">Salva</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ MODAL: CATALOGO ═══════════════════ -->
+    <div id="modal-catalog-overlay" class="modal-overlay hidden">
+        <div class="modal" id="modal-catalog">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-cat-title">Aggiungi al catalogo</h2>
+                <button class="btn-icon" id="btn-close-modal-catalog">✕</button>
+            </div>
+            <div class="modal-body">
+                <form id="catalog-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Box Number</label>
+                            <input type="text" name="box_number" placeholder="es. 01">
+                        </div>
+                        <div class="form-group flex-2">
+                            <label>Nome *</label>
+                            <input type="text" name="name" required placeholder="es. Batman">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Franchise *</label>
+                            <input type="text" name="franchise" required placeholder="es. DC Comics">
+                        </div>
+                        <div class="form-group">
+                            <label>Series</label>
+                            <input type="text" name="series" placeholder="es. Heroes">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group flex-2">
+                            <label>Variante</label>
+                            <input type="text" name="variant" placeholder="es. Glow in the Dark">
+                        </div>
+                        <div class="form-group">
+                            <label>Size</label>
+                            <select name="size">
+                                <option value="standard">Standard</option>
+                                <option value="super">Super</option>
+                                <option value="mega">Mega</option>
+                                <option value="mini">Mini</option>
+                                <option value="rides">Rides</option>
+                                <option value="2-pack">2-Pack</option>
+                                <option value="moment">Moment</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Anno rilascio</label>
+                            <input type="number" name="release_year" placeholder="2024">
+                        </div>
+                        <div class="form-group">
+                            <label>Data rilascio</label>
+                            <input type="text" name="release_date" placeholder="YYYY-MM-DD">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Retailer esclusivo</label>
+                            <input type="text" name="exclusive_retailer" placeholder="es. Target">
+                        </div>
+                        <div class="form-group">
+                            <label>Evento esclusivo</label>
+                            <input type="text" name="exclusive_event" placeholder="es. SDCC">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Special Feature</label>
+                            <input type="text" name="special_feature" placeholder="es. Flocked, Metallic">
+                        </div>
+                        <div class="form-group">
+                            <label>UPC</label>
+                            <input type="text" name="upc">
+                        </div>
+                        <div class="form-group">
+                            <label>Funko Item #</label>
+                            <input type="text" name="funko_item_number">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group flex-2">
+                            <label>URL Immagine</label>
+                            <input type="url" name="image_url">
+                        </div>
+                        <div class="form-group flex-2">
+                            <label>URL Fandom</label>
+                            <input type="url" name="fandom_url">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group form-check">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="is_chase"> Chase
+                            </label>
+                        </div>
+                        <div class="form-group form-check">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="is_vaulted"> Vaulted
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Note</label>
+                        <textarea name="notes" rows="2"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="btn-cancel-catalog">Annulla</button>
+                        <button type="submit" class="btn btn-primary" id="btn-save-catalog">Salva</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="/static/js/api.js?v=4"></script>
+    <script src="/static/js/ui.js?v=4"></script>
+    <script src="/static/js/app.js?v=4"></script>
+</body>
+</html>
